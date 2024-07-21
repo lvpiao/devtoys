@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<sqlMap namespace="sql_namespace">
+    <select id="selectUser" parameterClass="int" resultClass="com.tt.User">
+    </select>
+
+    <insert id="insertUser" parameterClass="com.tt.User">
+        <![CDATA[
+                     insert into user (name, age,sex, location)
+                     values (
+                                  #name:VARCHAR#,
+                                  #age:INT#,
+                                  #sex:VARCHAR#,
+                                  #location:VARCHAR#
+                                 )]]>
+        <selectKey resultClass="int" keyProperty="id">
+            SELECT
+            LAST_INSERT_ID() AS ID
+        </selectKey>
+    </insert>
+
+
+    <delete id="deleteUser" parameterClass="int">
+    </delete>
+
+
+    <select id="getTargets" parameterClass="com.tt.User">
+    </select>
+
+    <update id="getAllSQlCallerMethod" parameterClass="com.tt.User">
+        update user
+        <dynamic prepend="set">
+            <isNotNull prepend="," property="name">
+                name = #name:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="sex">
+                sex = #sex:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="location">
+                location = #location:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="age">
+                age = #age#
+            </isNotNull>
+        </dynamic>
+        where id = #id#
+    </update>
+
+</sqlMap>

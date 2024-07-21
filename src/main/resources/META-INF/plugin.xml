@@ -1,0 +1,24 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <id>com.antgroup</id>
+    <name>MyDevTool</name>
+    <vendor>JetBrains</vendor>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.java</depends>
+    <depends>com.intellij.modules.lang</depends>
+
+
+    <resource-bundle>messages.MyBundle</resource-bundle>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <codeInsight.lineMarkerProvider
+                language="JAVA"
+                implementationClass="com.antgroup.linemarker.JavaToXmlLineMarkerProvider"/>
+
+        <backgroundPostStartupActivity
+                implementation="com.antgroup.service.DaoXmlParseService"/>
+
+    </extensions>
+
+</idea-plugin>
