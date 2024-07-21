@@ -19,6 +19,13 @@
         <backgroundPostStartupActivity
                 implementation="com.antgroup.service.DaoXmlParseService"/>
 
+        <backgroundPostStartupActivity implementation="com.antgroup.listener.ProjectOpenedListener"/>
+
     </extensions>
+
+    <applicationListeners>
+        <listener class="com.antgroup.listener.ProjectCloseListener"
+                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
+    </applicationListeners>
 
 </idea-plugin>

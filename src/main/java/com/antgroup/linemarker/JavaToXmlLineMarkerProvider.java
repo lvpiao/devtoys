@@ -9,8 +9,8 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
-import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiMethodCallExpression;
 import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -21,27 +21,40 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 
+/**
+ * 从方法跳转至DAO层中SQL的定义处
+ */
 final class JavaToXmlLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
     // 日志
     private static final Logger LOG = Logger.getInstance(JavaToXmlLineMarkerProvider.class);
 
 
-    private static final String[] fromPackages = {"com.alibaba.fastjson", "org.springframework"};
+    private static final String[] fromPackagesPrefix = {"com.alipay", "com.mybank"};
+
+    /**
+     * 检查是否为需要添加跳转按钮的元素
+     */
+    private boolean isJumpElement(PsiElement element) {
+        if (!(element instanceof PsiMethodCallExpression)) {
+            return false;
+        }
+        PsiFile psiFile = element.getContainingFile();
+
+        return true;
+    }
 
     @Override
     protected void collectNavigationMarkers(@NotNull PsiElement element, @NotNull Collection<? super RelatedItemLineMarkerInfo<?>> result) {
-        if (!(element instanceof PsiMethodCallExpression)) {
+        if (!isJumpElement(element)) {
             return;
         }
 
-        Collection<PsiElement> targets = getTargets((PsiMethodCallExpression) element);
+        Collection<PsiElement> targets = getJumpTargets((PsiMethodCallExpression) element);
         if (CollectionUtils.isEmpty(targets)) {
             System.out.println("no target found");
             return;
@@ -53,8 +66,14 @@ final class JavaToXmlLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
         result.add(builder.createLineMarkerInfo(element));
     }
-    
-    private Collection<PsiElement> getTargets(PsiMethodCallExpression fromElement) {
+
+    /**
+     * 获取跳转目标
+     *
+     * @param fromElement
+     * @return
+     */
+    private Collection<PsiElement> getJumpTargets(PsiMethodCallExpression fromElement) {
 
         Project project = fromElement.getProject();
         Collection<VirtualFile> virtualFiles = FileTypeIndex.getFiles(XmlFileType.INSTANCE, GlobalSearchScope.projectScope(project));
