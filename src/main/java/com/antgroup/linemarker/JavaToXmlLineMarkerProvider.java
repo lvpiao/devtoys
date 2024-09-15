@@ -55,6 +55,7 @@ final class JavaToXmlLineMarkerProvider extends RelatedItemLineMarkerProvider {
         }
 
         Collection<PsiElement> targets = getJumpTargets((PsiMethodCallExpression) element);
+        System.out.println(targets.size());
         if (CollectionUtils.isEmpty(targets)) {
             System.out.println("no target found");
             return;

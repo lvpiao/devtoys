@@ -21,7 +21,7 @@
     </insert>
 
 
-    <delete id="deleteUser" parameterClass="int">
+    <delete id="getJumpTargets" parameterClass="int">
     </delete>
 
 
