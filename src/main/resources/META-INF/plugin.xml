@@ -14,15 +14,15 @@
     <extensions defaultExtensionNs="com.intellij">
         <codeInsight.lineMarkerProvider
                 language="JAVA"
-                implementationClass="com.antgroup.linemarker.JavaToXmlLineMarkerProvider"/>
+                implementationClass="com.antgroup.devtoys.linemarker.JavaToXmlLineMarkerProvider"/>
 
 
-        <backgroundPostStartupActivity implementation="com.antgroup.listener.ProjectOpenedListener"/>
+        <backgroundPostStartupActivity implementation="com.antgroup.devtoys.listener.ProjectOpenedListener"/>
 
     </extensions>
 
     <applicationListeners>
-        <listener class="com.antgroup.listener.ProjectCloseListener"
+        <listener class="com.antgroup.devtoys.listener.ProjectCloseListener"
                   topic="com.intellij.openapi.project.ProjectManagerListener"/>
     </applicationListeners>
 
