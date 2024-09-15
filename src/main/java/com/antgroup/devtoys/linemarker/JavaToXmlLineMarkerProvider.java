@@ -8,10 +8,7 @@ import com.intellij.ide.highlighter.XmlFileType;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.PsiMethodCallExpression;
+import com.intellij.psi.*;
 import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -40,7 +37,7 @@ final class JavaToXmlLineMarkerProvider extends RelatedItemLineMarkerProvider {
      * 检查是否为需要添加跳转按钮的元素
      */
     private boolean isJumpElement(PsiElement element) {
-        if (!(element instanceof PsiMethodCallExpression)) {
+        if (!(element instanceof PsiIdentifier)) {
             return false;
         }
         PsiFile psiFile = element.getContainingFile();
@@ -54,9 +51,8 @@ final class JavaToXmlLineMarkerProvider extends RelatedItemLineMarkerProvider {
             return;
         }
 
-        Collection<PsiElement> targets = getJumpTargets((PsiMethodCallExpression) element);
+        Collection<PsiElement> targets = getJumpTargets((PsiIdentifier) element);
         if (CollectionUtils.isEmpty(targets)) {
-            System.out.println("no target found");
             return;
         }
 
@@ -81,11 +77,10 @@ final class JavaToXmlLineMarkerProvider extends RelatedItemLineMarkerProvider {
      * @param fromElement
      * @return
      */
-    private Collection<PsiElement> getJumpTargets(PsiMethodCallExpression fromElement) {
+    private Collection<PsiElement> getJumpTargets(PsiIdentifier fromElement) {
 
         Project project = fromElement.getProject();
         Collection<VirtualFile> virtualFiles = FileTypeIndex.getFiles(XmlFileType.INSTANCE, GlobalSearchScope.projectScope(project));
-
 
         List<PsiElement> psiElements = Lists.newArrayList();
         for (VirtualFile virtualFile : virtualFiles) {
@@ -106,7 +101,7 @@ final class JavaToXmlLineMarkerProvider extends RelatedItemLineMarkerProvider {
                 if (!x.isValid()) {
                     return false;
                 }
-                return StringUtils.equals(xmlAttribute.getValue(), fromElement.getMethodExpression().getText());
+                return StringUtils.equals(xmlAttribute.getValue(), fromElement.getText());
             })));
 
         }

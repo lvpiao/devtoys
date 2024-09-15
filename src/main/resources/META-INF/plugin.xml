@@ -26,4 +26,6 @@
                   topic="com.intellij.openapi.project.ProjectManagerListener"/>
     </applicationListeners>
 
+    <idea-version since-build="232"/>
+
 </idea-plugin>

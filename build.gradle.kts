@@ -3,7 +3,6 @@ import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 
 plugins {
     id("java")
-    id("org.jetbrains.kotlin.jvm") version "1.9.25"
     id("org.jetbrains.intellij.platform") version "2.0.1"
 }
 
@@ -11,9 +10,10 @@ group = "com.antgroup"
 version = "1.0-SNAPSHOT"
 
 repositories {
-    mavenCentral()
+    maven("https://maven.aliyun.com/repository/public")
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
     gradlePluginPortal()
+    mavenCentral()
 
     intellijPlatform {
         defaultRepositories()
@@ -23,7 +23,7 @@ repositories {
 dependencies {
     intellijPlatform {
         bundledPlugin("com.intellij.java")
-        intellijIdeaCommunity("2024.2")
+        intellijIdeaCommunity("2023.3")
         pluginVerifier()
         zipSigner()
         instrumentationTools()
@@ -38,10 +38,6 @@ tasks {
     withType<JavaCompile> {
         sourceCompatibility = "17"
         targetCompatibility = "17"
-    }
-
-    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions.jvmTarget = "17"
     }
 
     patchPluginXml {
