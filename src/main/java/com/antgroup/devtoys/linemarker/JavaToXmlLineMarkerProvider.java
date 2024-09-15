@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerInfo;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerProvider;
 import com.intellij.codeInsight.navigation.NavigationGutterIconBuilder;
-import com.intellij.icons.AllIcons;
 import com.intellij.ide.highlighter.XmlFileType;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
