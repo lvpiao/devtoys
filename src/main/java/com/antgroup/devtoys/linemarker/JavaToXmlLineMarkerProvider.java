@@ -22,9 +22,6 @@ import java.util.Collection;
 import java.util.List;
 
 
-/**
- * 从方法跳转至DAO层中SQL的定义处
- */
 final class JavaToXmlLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
     // 日志
@@ -33,9 +30,6 @@ final class JavaToXmlLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
     private static final String[] fromPackagesPrefix = {"com.alipay", "com.mybank"};
 
-    /**
-     * 检查是否为需要添加跳转按钮的元素
-     */
     private boolean isJumpElement(PsiElement element) {
         if (!(element instanceof PsiIdentifier)) {
             return false;
@@ -72,8 +66,6 @@ final class JavaToXmlLineMarkerProvider extends RelatedItemLineMarkerProvider {
     }
 
     /**
-     * 获取跳转目标
-     *
      * @param fromElement
      * @return
      */
@@ -88,7 +80,6 @@ final class JavaToXmlLineMarkerProvider extends RelatedItemLineMarkerProvider {
             if (xmlFile == null) {
                 continue;
             }
-            // 所在目录
             String psiDirectory = xmlFile.getVirtualFile().getPath();
             if (!StringUtils.contains(psiDirectory, "src")) {
                 continue;

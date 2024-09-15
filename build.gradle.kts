@@ -27,10 +27,8 @@ dependencies {
         pluginVerifier()
         zipSigner()
         instrumentationTools()
-
-        testFramework(TestFrameworkType.Platform)
     }
-
+    implementation("cn.hutool:hutool-all:5.8.32")
 }
 
 tasks {
@@ -53,5 +51,13 @@ tasks {
 
     publishPlugin {
         token.set(System.getenv("PUBLISH_TOKEN"))
+    }
+
+    withType(JavaCompile::class.java) {
+        options.encoding = "UTF-8"
+    }
+
+    withType<JavaExec> {
+        systemProperty("file.encoding", "utf-8")
     }
 }

@@ -16,9 +16,13 @@
                 language="JAVA"
                 implementationClass="com.antgroup.devtoys.linemarker.JavaToXmlLineMarkerProvider"/>
 
+        <codeInsight.lineMarkerProvider
+                language="JAVA"
+                implementationClass="com.antgroup.devtoys.linemarker.GraySceneServiceLineMarkerProvider"/>
 
         <backgroundPostStartupActivity implementation="com.antgroup.devtoys.listener.ProjectOpenedListener"/>
 
+        <backgroundPostStartupActivity implementation="com.antgroup.devtoys.server.ServerDaemonActivity"/>
     </extensions>
 
     <applicationListeners>
