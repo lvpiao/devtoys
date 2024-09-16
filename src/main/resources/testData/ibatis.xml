@@ -28,7 +28,7 @@
     <select id="collectElements2" parameterClass="com.tt.User">
     </select>
 
-    <update id="create1" parameterClass="com.tt.User">
+    <update id="collectNavigationMarkers" parameterClass="com.tt.User">
         update user
         <dynamic prepend="set">
             <isNotNull prepend="," property="name">

@@ -16,26 +16,23 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 
 public class ServerDaemonActivity implements ProjectActivity {
     private static final Logger LOG = Logger.getInstance(ServerDaemonActivity.class);
 
-    private static ThreadPoolExecutor serverHolder;
+    private static Thread serverHolder;
+
+    private static final Lock lock = new ReentrantLock();
+
+    public static Process process = null;
 
     /**
      * @return
      */
     private static boolean checkServerOnline() {
-        if (serverHolder == null
-                || serverHolder.isShutdown()
-                || serverHolder.isTerminated()
-                || serverHolder.getActiveCount() == 0) {
-            return false;
-        }
         try {
             String res = HttpUtil.get(Constant.SERVER_ADDRESS + "hello");
             return StringUtils.equals(res, "hello");
@@ -49,10 +46,17 @@ public class ServerDaemonActivity implements ProjectActivity {
 
         if (checkServerOnline()) {
             LOG.info("服务已启动");
+            System.out.println("服务已启动");
+            return;
+        }
+        System.out.println("startServer begin");
+        boolean res = lock.tryLock();
+        if (!res) {
             return;
         }
 
-        try (InputStream jarInputStream = ServerDaemonActivity.class.getResourceAsStream("/path/to/your.jar")) {
+
+        try (InputStream jarInputStream = ServerDaemonActivity.class.getResourceAsStream("/main.jar")) {
             // 获取资源文件夹中 JAR 文件的输入流
             if (jarInputStream == null) {
                 throw new IllegalArgumentException("JAR file not found!");
@@ -70,20 +74,25 @@ public class ServerDaemonActivity implements ProjectActivity {
                     outputStream.write(buffer, 0, bytesRead);
                 }
             }
-
+            System.out.println("startServer begin2");
             // 使用 ProcessBuilder 启动临时文件
             ProcessBuilder processBuilder = new ProcessBuilder("java", "-jar", tempJarFile.getAbsolutePath());
-            processBuilder.inheritIO(); // 继承当前进程的输入输出
-            Process process = processBuilder.start();
+            process = processBuilder.start();
 
+            System.out.println("startServer End");
+            LOG.info("服务已启动");
             // 等待进程结束
             int exitCode = process.waitFor();
             System.out.println("Process exited with code: " + exitCode);
 
         } catch (Exception e) {
+            e.printStackTrace();
             LOG.info("Server fail", e);
         } finally {
-            serverHolder.shutdownNow();
+            if (process != null) {
+                process.destroyForcibly();
+            }
+            lock.unlock();
             LOG.info("Server exit");
         }
     }
@@ -95,10 +104,9 @@ public class ServerDaemonActivity implements ProjectActivity {
         if (checkServerOnline()) {
             return Unit.INSTANCE;
         }
-        serverHolder = new ThreadPoolExecutor(1,
-                1, 0, TimeUnit.MINUTES, new LinkedBlockingQueue<>());
-
-        serverHolder.submit(ServerDaemonActivity::startServer);
+        serverHolder = new Thread(ServerDaemonActivity::startServer);
+        serverHolder.setDaemon(true);
+        serverHolder.start();
         return Unit.INSTANCE;
     }
 

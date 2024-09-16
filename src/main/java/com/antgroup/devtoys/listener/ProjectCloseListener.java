@@ -2,6 +2,7 @@
 
 package com.antgroup.devtoys.listener;
 
+import com.antgroup.devtoys.server.ServerDaemonActivity;
 import com.antgroup.devtoys.service.ProjectCountingService;
 import com.antgroup.devtoys.util.EasyUtil;
 import com.intellij.openapi.application.ApplicationManager;
@@ -19,6 +20,12 @@ final class ProjectCloseListener implements ProjectManagerListener {
         // Get the counting service
         ProjectCountingService projectCountingService = EasyUtil.getService(ProjectCountingService.class);
         System.out.println("Project closed, left opened projects: " + projectCountingService.decreaseOpenProjectCount());
+
+        if (projectCountingService.getOpenedProjectCount() == 0) {
+            if (ServerDaemonActivity.process != null) {
+                ServerDaemonActivity.process.destroyForcibly();
+            }
+        }
     }
 
 }

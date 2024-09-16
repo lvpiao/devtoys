@@ -31,11 +31,16 @@
     </applicationListeners>
 
     <actions>
-        <action id="com.antgroup.devtoys.action.NavigateToMethodAction"
-                class="com.antgroup.devtoys.action.NavigateToMethodAction" text="跳转到实现">
+        <action id="com.antgroup.devtoys.action.JumpToMethodAction"
+                class="com.antgroup.devtoys.action.JumpToMethodAction" text="跳转到实现">
 
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
 
+        </action>
+
+        <action id="com.antgroup.devtoys.action.JumpToImplementationAction"
+                class="com.antgroup.devtoys.action.JumpToImplementationAction" text="跳转到实现">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </action>
     </actions>
 

@@ -1,3 +1,1 @@
 ﻿Manifest-Version: 1.0
-Main-Class: com.antgroup.devtoys.server.ServerMocker
-
