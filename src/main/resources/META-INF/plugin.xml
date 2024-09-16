@@ -30,6 +30,15 @@
                   topic="com.intellij.openapi.project.ProjectManagerListener"/>
     </applicationListeners>
 
+    <actions>
+        <action id="com.antgroup.devtoys.action.NavigateToMethodAction"
+                class="com.antgroup.devtoys.action.NavigateToMethodAction" text="跳转到实现">
+
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+
+        </action>
+    </actions>
+
     <idea-version since-build="232"/>
 
 </idea-plugin>

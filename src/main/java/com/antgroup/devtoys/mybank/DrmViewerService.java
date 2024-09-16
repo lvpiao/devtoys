@@ -3,7 +3,7 @@ package com.antgroup.devtoys.mybank;
 import com.intellij.openapi.components.Service;
 import com.intellij.openapi.project.Project;
 
-@Service(Service.Level.PROJECT)
+@Service(Service.Level.APP)
 public final class DrmViewerService {
 
     private Project myProject;
